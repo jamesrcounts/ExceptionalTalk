@@ -6,11 +6,11 @@ namespace ExceptionalExamples
     {
         public Helper(object url, object id, object data)
         {
-            Console.WriteLine("yay");
         }
 
-        public void Send()
+        public bool Send()
         {
+            return true;
         }
     }
 }
