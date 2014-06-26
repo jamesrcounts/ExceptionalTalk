@@ -22,6 +22,15 @@ namespace ExceptionalExamples
     public class UnitTests
     {
         [TestMethod]
+        public void Name()
+        {
+            var foo = new Foo();
+            var pFoo = new PrivateObject(foo);
+            var response = new object();
+            pFoo.Invoke("SaveCallback", new object[] { response, (Action)null, }); //this line throws exception
+        }
+
+        [TestMethod]
         public void NullRef()
         {
             var a = Router.GetRoute("A");
@@ -73,6 +82,14 @@ namespace ExceptionalExamples
         {
             var form = new { Date = "2010-01-24" };
             var dateTime = DateTime.Parse(form.Date);
+        }
+
+        public class Foo
+        {
+            private void SaveCallback(object response,
+                                                   Action rollbackActionIfSaveFails,
+                                                   Action postSaveActionOnSuccess)
+            { }
         }
     }
 
