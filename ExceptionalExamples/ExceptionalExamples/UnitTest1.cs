@@ -9,6 +9,7 @@ namespace ExceptionalExamples
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.InteropServices;
     using System.Threading.Tasks;
     using System.Windows.Forms;
 
@@ -21,15 +22,6 @@ namespace ExceptionalExamples
     [TestClass]
     public class UnitTests
     {
-        [TestMethod]
-        public void Name()
-        {
-            var foo = new Foo();
-            var pFoo = new PrivateObject(foo);
-            var response = new object();
-            pFoo.Invoke("SaveCallback", new object[] { response, (Action)null, }); //this line throws exception
-        }
-
         [TestMethod]
         public void NullRef()
         {
@@ -84,12 +76,42 @@ namespace ExceptionalExamples
             var dateTime = DateTime.Parse(form.Date);
         }
 
-        public class Foo
+        //var isAnimating = (bool)pb.Invoke("GetFlag", new object[] { 0x0010 });
+
+        [TestMethod]
+        public void ButtonAnimation()
         {
-            private void SaveCallback(object response,
-                                                   Action rollbackActionIfSaveFails,
-                                                   Action postSaveActionOnSuccess)
-            { }
+            var su = new SignUpPrompt();
+            su.Advertise();
+            var pb = new PrivateObject(su.BuyButton, new PrivateType(typeof(ButtonBase)));
+            var isAnimating = (bool)pb.Invoke("GetFlag", new[] { 0x0010 });
+            Assert.IsTrue(isAnimating);
+        }
+
+        [TestMethod]
+        public void NativeTest()
+        {
+            NativeDll.svn_client_info();
+        }
+    }
+
+    public class NativeDll
+    {
+        [DllImport("libsvn_client-1-0.dll")]
+        public static extern int svn_client_info();
+    }
+
+    public class SignUpPrompt : Form
+    {
+        public SignUpPrompt()
+        {
+            BuyButton = new Button();
+        }
+
+        public Button BuyButton { get; private set; }
+
+        public void Advertise()
+        {
         }
     }
 
