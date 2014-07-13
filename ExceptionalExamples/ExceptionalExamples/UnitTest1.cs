@@ -6,6 +6,7 @@ namespace ExceptionalExamples
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Data.SqlClient;
+    using System.Drawing;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -23,12 +24,18 @@ namespace ExceptionalExamples
     public class UnitTests
     {
         [TestMethod]
-        public void NullRef()
+        public void RouteToNullEvil()
         {
             var a = Router.GetRoute("A");
             var b = Router.GetRoute("B");
             var c = Router.GetRoute("C");
             var result = new Helper(a.From, b.To, c.ViaProxy).Send();
+            //dynamic m;
+
+            //throw new NullReferenceException(
+            //    "Null reference while executing: {0}.{1}",
+            //    m.ClassName,
+            //    m.MethodSignature());
         }
 
         [TestMethod]
@@ -48,10 +55,16 @@ namespace ExceptionalExamples
         }
 
         [TestMethod]
-        public void Rectangle()
+        public void HeapfulOfRectangles()
         {
             var myForm = new MyForm();
-            WinFormsApprovals.Verify(myForm);
+
+            //            WinFormsApprovals.Verify(myForm);
+            //            Point start = null;
+            //            Point end = null;
+
+            //            throw new ArgumentException(@"Rectangle ‘{{X={0},Y={1},Width={2},Height={3}}}'
+            //cannot have a width or height equal to 0.", start.X, start.Y, end.X - start.X, end.Y - start.Y);
         }
 
         //Uri badUri = new Uri("mailto:test1@mischel.comtest2@mischel.com");
@@ -62,11 +75,15 @@ namespace ExceptionalExamples
         //string[] words = { "one", "two", "three" };
         //Console.WriteLine(words[Math.Abs(hc) % 3]);
         [TestMethod]
-        public void ArrayCopy()
+        public void CastIntoVoid()
         {
             Component[] from = { new Button(), new Form(), new ToolTip(), };
-            Component[] to = new Collage().GetMemories();
-            Array.Copy(from, to, from.Length);
+            //Component[] to = new Collage().GetMemories();
+            //Array.Copy(from, to, from.Length);
+
+            int[] to = { 1 };
+            object element = "a";
+            throw new InvalidCastException(string.Format("<{0}> could not be cast to destination array type <{1}>", element.GetType().Name, to.GetType().Name));
         }
 
         [TestMethod]
