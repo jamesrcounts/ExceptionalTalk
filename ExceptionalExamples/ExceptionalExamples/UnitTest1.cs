@@ -10,7 +10,6 @@ namespace ExceptionalExamples
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Runtime.InteropServices;
     using System.Threading.Tasks;
     using System.Windows.Forms;
 
@@ -21,7 +20,7 @@ namespace ExceptionalExamples
     using ApprovalUtilities.Utilities;
 
     [TestClass]
-    public class UnitTests
+    public class Examples
     {
         [TestMethod]
         public void RouteToNullEvil()
@@ -39,27 +38,11 @@ namespace ExceptionalExamples
         }
 
         [TestMethod]
-        public void FileStreamTest()
-        {
-            var name = PathUtilities.GetAdjacentFile("Kool.mdf");
-            SqlCommand sqlCommand;
-
-            using (var conn = new SqlConnection(@"jdbc:sqlserver://localhost;integratedSecurity=true;"))
-            {
-                conn.Open();
-
-                sqlCommand = conn.CreateCommand();
-                sqlCommand.CommandText = "SELECT 432";
-                object executeScalar = sqlCommand.ExecuteScalar();
-            }
-        }
-
-        [TestMethod]
         public void HeapfulOfRectangles()
         {
             var myForm = new MyForm();
+            WinFormsApprovals.Verify(myForm);
 
-            //            WinFormsApprovals.Verify(myForm);
             //            Point start = null;
             //            Point end = null;
 
@@ -67,76 +50,67 @@ namespace ExceptionalExamples
             //cannot have a width or height equal to 0.", start.X, start.Y, end.X - start.X, end.Y - start.Y);
         }
 
-        //Uri badUri = new Uri("mailto:test1@mischel.comtest2@mischel.com");
-        //var absoluteUri = badUri.AbsoluteUri;
-        //string f = "blah blah blah";
-        //int hc = f.GetHashCode();
-        //hc = Int32.MinValue;
-        //string[] words = { "one", "two", "three" };
-        //Console.WriteLine(words[Math.Abs(hc) % 3]);
         [TestMethod]
         public void CastIntoVoid()
         {
             Component[] from = { new Button(), new Form(), new ToolTip(), };
-            //Component[] to = new Collage().GetMemories();
-            //Array.Copy(from, to, from.Length);
+            Component[] to = new Collage().GetMemories();
+            Array.Copy(from, to, from.Length);
 
-            int[] to = { 1 };
-            object element = "a";
-            throw new InvalidCastException(string.Format("<{0}> could not be cast to destination array type <{1}>", element.GetType().Name, to.GetType().Name));
+            //int[] to = { 1 };
+            //object element = "a";
+            //throw new InvalidCastException(string.Format("<{0}> could not be cast to destination array type <{1}>", element.GetType().Name, to.GetType().Name));
         }
 
         [TestMethod]
-        public void DateTimeParse()
+        public void DateWithAParser()
         {
-            var form = new { Date = "2010-01-24" };
+            var input = "2010-01-24";
+            var form = new { Date = input };
             var dateTime = DateTime.Parse(form.Date);
+
+            throw new FormatException(@"Cannot parse '{0}' at index {1}
+Valid formats include:
+ '<Month> <Day> <Year>' => 'January 14 2010'
+ '<Month>/<Day>/<Year>' => '1/14/2010'
+ '<Year>-<Month>-<Day>' => '2010-01-24'".FormatWith(input, 7));
         }
 
         //var isAnimating = (bool)pb.Invoke("GetFlag", new object[] { 0x0010 });
 
         [TestMethod]
-        public void ButtonAnimation()
+        public void TouchingYourPrivates()
         {
             var su = new SignUpPrompt();
             su.Advertise();
             var pb = new PrivateObject(su.BuyButton, new PrivateType(typeof(ButtonBase)));
             var isAnimating = (bool)pb.Invoke("GetFlag", new[] { 0x0010 });
             Assert.IsTrue(isAnimating);
+
+            dynamic m;
+            object commonFixes;
+            var method = m.GetMethodSignature();
+            throw new MissingMethodException(@"Cannot find method: {0}.
+ Possible methods starting with “{1}” are:\n{2}
+ Common Fixes\n{3}".FormatWith(method, method[0], this.GetMethodsStartingWith(method[0]), commonFixes));
         }
 
         [TestMethod]
-        public void NativeTest()
+        public void DoNotDisturbTheNatives()
         {
             NativeDll.svn_client_info();
-        }
-    }
 
-    public class NativeDll
-    {
-        [DllImport("libsvn_client-1-0.dll")]
-        public static extern int svn_client_info();
-    }
-
-    public class SignUpPrompt : Form
-    {
-        public SignUpPrompt()
-        {
-            BuyButton = new Button();
+            var dll = "libsvn_client-1-0.dll";
+            object missingDependancy;
+            string[] allDependancies;
+            throw new DllNotFoundException(@"Problems loading dependencies for '{0}'.
+Could not find dependency: '{1}'
+Required libraries:\n{2}".FormatWith(dll, missingDependancy, allDependancies.ToReadableString()));
         }
 
-        public Button BuyButton { get; private set; }
-
-        public void Advertise()
+        private object GetMethodsStartingWith(object o)
         {
-        }
-    }
-
-    public class Collage
-    {
-        public Component[] GetMemories()
-        {
-            return new Control[10];
+            throw new NotImplementedException();
         }
     }
 }

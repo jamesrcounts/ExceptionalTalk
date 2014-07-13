@@ -100,15 +100,18 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Collage.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="MyForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="NativeDll.cs" />
     <Compile Include="Route.cs" />
     <Compile Include="Router.cs" />
-    <Compile Include="UnitTest1.cs">
+    <Compile Include="SignUpPrompt.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
